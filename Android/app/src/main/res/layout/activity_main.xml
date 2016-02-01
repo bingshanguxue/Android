@@ -14,4 +14,33 @@
         android:layout_below="@+id/tv_resolution"
         android:layout_marginTop="8dp"/>
 
+    <EditText
+        android:id="@+id/et_com"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_display"/>
+    <Button
+        android:id="@+id/button_serial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="串口"
+        android:layout_below="@id/et_com"/>
+
+
+
+    <Button
+        android:id="@+id/button_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置"
+        android:layout_below="@id/button_serial"/>
+
+
+    <Button
+        android:id="@+id/button_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="抽屉"
+        android:layout_below="@id/button_serial"/>
+
 </RelativeLayout>

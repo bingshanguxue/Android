@@ -4,25 +4,77 @@ android {
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
 
+    signingConfigs {
+        debug {
+        }
+        release {
+        }
+    }
+
     defaultConfig {
-        applicationId "me.bingshanguxuecom.android"
+        applicationId "me.bingshanguxue.android"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0.1"
+        versionCode 7
+        versionName "1.0.2"
+
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "8caAYabwsR7Kch7w2RBLP2", // 个推 app id
+                GETUI_APP_KEY   : "hpwhDbalh57lV5B0INly25", // 个推 app key
+                GETUI_APP_SECRET: "a49HwCA5pI9laxymMNmxpA", // 个推 app secret
+                PACKAGE_NAME    : applicationId // apk 包名
+        ]
+
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+        release {
+            minifyEnabled true
+            zipAlignEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        abortOnError false
+    }
+
+    File propFile = file('signing.properties');
+    if (propFile.exists()) {
+        def Properties props = new Properties()
+        props.load(new FileInputStream(propFile))
+        if (props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+                props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+            android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+            android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+            android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+            android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+        } else {
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        android.buildTypes.release.signingConfig = null
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //个推
+    compile files('libs/GetuiExt-2.0.3.jar')
+    compile files('libs/GetuiSDK2.6.4.0.jar')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.android.support:support-v4:22.2.1'
 }
